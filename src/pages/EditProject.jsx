@@ -1,31 +1,30 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import FormularioProyecto from "../components/FormularioProyecto";
-import useProyectos from "../hooks/useProyectos";
+import FormProject from "../components/FormProject";
+import useProjects from "../hooks/useProjects";
 
-const EditarProyecto = () => {
+const EditProject = () => {
   const params = useParams();
-  const { obtenerProyecto, proyecto, cargando, eliminarProyecto } =
-    useProyectos();
+  const { getProject, project, loading, deleteProject } = useProjects();
 
   useEffect(() => {
-    obtenerProyecto(params.id);
+    getProject(params.id);
   }, []);
 
-  const { nombre } = proyecto;
+  const { name } = project;
 
   const handleClick = () => {
-    if (confirm("Deseas eliminar este proyecto?")) {
-      eliminarProyecto(params.id);
+    if (confirm("Do you want to delete this project?")) {
+      deleteProject(params.id);
     }
   };
 
-  if (cargando) return "Cargando...";
+  if (loading) return "Loading...";
 
   return (
     <>
       <div className="flex justify-between">
-        <h1 className="font-black text-3xl">Editar Proyecto: {nombre}</h1>
+        <h1 className="font-black text-3xl">Edit Project: {name}</h1>
 
         <div className="flex items-center gap-4 text-gray-400 hover:text-black hover:cursor-pointer">
           <svg
@@ -44,15 +43,15 @@ const EditarProyecto = () => {
           </svg>
 
           <button className="font-bold" onClick={handleClick}>
-            Eliminar
+            Delete
           </button>
         </div>
       </div>
       <div className="mt-10 flex justify-center">
-        <FormularioProyecto />
+        <FormProject />
       </div>
     </>
   );
 };
 
-export default EditarProyecto;
+export default EditProject;

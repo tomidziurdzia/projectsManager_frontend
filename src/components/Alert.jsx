@@ -1,13 +1,13 @@
-const Alerta = ({ alerta }) => {
+const Alert = ({ alert }) => {
   return (
     <div
       className={`${
-        alerta.error ? "bg-red-400" : "bg-green-400"
+        alert.error ? "bg-red-400" : "bg-primary"
       } text-center p-3 rounded-xl text-white font-bold text-sm my-10`}
     >
-      {alerta.msg}
+      {alert.msg}
     </div>
   );
 };
 
-export default Alerta;
+export default Alert;

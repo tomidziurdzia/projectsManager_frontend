@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Alerta from "../components/Alerta";
-import clienteAxios from "../config/clienteAxios";
+import Alert from "../components/Alert";
+import clientAxios from "../config/clientAxios";
 import useAuth from "../hooks/useAuth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [alerta, setAlerta] = useState({});
+  const [alert, setAlert] = useState({});
 
   const { setAuth } = useAuth();
 
@@ -17,34 +17,34 @@ const Login = () => {
     e.preventDefault();
 
     if ([email, password].includes("")) {
-      setAlerta({ msg: "Todos los campos son obligatorios", error: true });
+      setAlert({ msg: "All field are required", error: true });
     }
 
     try {
-      const { data } = await clienteAxios.post("/usuarios/login", {
+      const { data } = await clientAxios.post("/users/login", {
         email,
         password,
       });
 
-      setAlerta({});
+      setAlert({});
 
       localStorage.setItem("token", data.token);
       setAuth(data);
-      navigate("/proyectos");
+      navigate("/projects");
     } catch (error) {
-      setAlerta({ msg: error.response.data.msg, error: true });
+      setAlert({ msg: error.response.data.msg, error: true });
     }
   };
 
-  const { msg } = alerta;
+  const { msg } = alert;
 
   return (
     <>
-      <h1 className="text-sky-500 font-black text-3xl text-center">
-        Inicia sesion y administra tus proyectos
+      <h1 className="text-primary font-black text-3xl text-center">
+        Login and manage your projects
       </h1>
 
-      {msg && <Alerta alerta={alerta} />}
+      {msg && <Alert alert={alert} />}
 
       <form
         className="my-10 bg-white shadow rounded-lg p-10"
@@ -56,7 +56,7 @@ const Login = () => {
           </label>
           <input
             type="email"
-            placeholder="Email de registro"
+            placeholder="Email"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
             id="email"
             value={email}
@@ -69,7 +69,7 @@ const Login = () => {
           </label>
           <input
             type="password"
-            placeholder="Password de registro"
+            placeholder="Password"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
             id="password"
             value={password}
@@ -78,24 +78,24 @@ const Login = () => {
         </div>
         <input
           type="submit"
-          value="Iniciar Sesion"
-          className="bg-sky-500 w-full text-white py-3 font-bold rounded hover:cursor-pointer hover:bg-sky-600 transition-colors"
+          value="Login"
+          className="bg-primary border-2 border-primary w-full text-white py-3 font-bold rounded hover:cursor-pointer hover:bg-white hover:text-primary transition-colors"
         />
       </form>
 
       <nav className="lg:flex lg:justify-between">
         <Link
           className="block text-center my-5 text-slate-500 text-sm"
-          to="registrar"
+          to="register"
         >
-          No tienes una cuenta? Registrate
+          Don't have an account? Sign up
         </Link>
 
         <Link
           className="block text-center my-5 text-slate-500 text-sm"
-          to="olvide-password"
+          to="forget-password"
         >
-          Olvide mi password
+          Forget password
         </Link>
       </nav>
     </>

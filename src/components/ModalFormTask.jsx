@@ -1,79 +1,73 @@
 import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import useProyectos from "../hooks/useProyectos";
-import Alerta from "./Alerta";
+import useProjects from "../hooks/useProjects";
+import Alert from "./Alert";
 import { useParams } from "react-router-dom";
 
-const PRIORIDAD = ["Baja", "Media", "Alta"];
+const PRIORITY = ["Low", "Medium", "High"];
 
-const ModalFormularioTarea = () => {
+const ModalFormTask = () => {
   const [id, setId] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [prioridad, setPrioridad] = useState("");
-  const [fechaEntrega, setFechaEntrega] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("");
+  const [dueDate, setDueDate] = useState("");
 
   const params = useParams();
 
-  const {
-    handleModalTarea,
-    modalFormularioTarea,
-    mostrarAlerta,
-    alerta,
-    submitTarea,
-    tarea,
-  } = useProyectos();
+  const { handleModalTask, modalFormTask, showAlert, alert, submitTask, task } =
+    useProjects();
 
   useEffect(() => {
-    if (tarea?._id) {
-      setId(tarea._id);
-      setNombre(tarea.nombre);
-      setDescripcion(tarea.descripcion);
-      setFechaEntrega(tarea.fechaEntrega?.split("T")[0]);
-      setPrioridad(tarea.prioridad);
+    if (task?._id) {
+      setId(task._id);
+      setName(task.name);
+      setDescription(task.description);
+      setDueDate(task.dueDate?.split("T")[0]);
+      setPriority(task.priority);
       return;
     }
     setId("");
-    setNombre("");
-    setDescripcion("");
-    setFechaEntrega("");
-    setDescripcion("");
-  }, [tarea]);
+    setName("");
+    setDescription("");
+    setDueDate("");
+    setPriority("");
+  }, [task]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if ([nombre, descripcion, prioridad, fechaEntrega].includes("")) {
-      mostrarAlerta({
-        msg: "Todos los campos son obligatorios",
+    if ([name, description, priority, dueDate].includes("")) {
+      showAlert({
+        msg: "All fields are required",
         error: true,
       });
       return;
     }
 
-    await submitTarea({
+    await submitTask({
       id,
-      nombre,
-      descripcion,
-      prioridad,
-      fechaEntrega,
-      proyecto: params.id,
+      name,
+      description,
+      priority,
+      dueDate,
+      project: params.id,
     });
 
     setId("");
-    setNombre("");
-    setDescripcion("");
-    setPrioridad("");
-    setFechaEntrega("");
+    setName("");
+    setDescription("");
+    setPriority("");
+    setDueDate("");
   };
 
-  const { msg } = alerta;
+  const { msg } = alert;
 
   return (
-    <Transition.Root show={modalFormularioTarea} as={Fragment}>
+    <Transition.Root show={modalFormTask} as={Fragment}>
       <Dialog
         as="div"
         className="fixed z-10 inset-0 overflow-y-auto"
-        onClose={handleModalTarea}
+        onClose={handleModalTask}
       >
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
@@ -110,9 +104,9 @@ const ModalFormularioTarea = () => {
                 <button
                   type="button"
                   className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  onClick={handleModalTarea}
+                  onClick={handleModalTask}
                 >
-                  <span className="sr-only">Cerrar</span>
+                  <span className="sr-only">Close</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-6 w-6"
@@ -134,84 +128,84 @@ const ModalFormularioTarea = () => {
                     as="h3"
                     className="text-lg leading-6 font-bold text-gray-900"
                   >
-                    {id ? "Editar Tarea" : "Crear Tarea"}
+                    {id ? "Edit Task" : "New Task"}
                   </Dialog.Title>
-                  {msg && <Alerta alerta={alerta} />}
+                  {msg && <Alert alert={alert} />}
                   <form onSubmit={handleSubmit} className="my-10" action="">
                     <div className="mb-5">
                       <label
-                        htmlFor="nombre"
+                        htmlFor="name"
                         className="text-gray-700 font-bold text-sm"
                       >
-                        Nombre Tarea
+                        Task Name
                       </label>
                       <input
-                        id="nombre"
+                        id="name"
                         type="text"
                         className="border w-full mt-2 placeholder-gray-400 rounded-md p-2"
-                        placeholder="Nombre de la tarea"
-                        value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
+                        placeholder="Task name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                       />
                     </div>
 
                     <div className="mb-5">
                       <label
-                        htmlFor="descripcion"
+                        htmlFor="description"
                         className="text-gray-700 font-bold text-sm"
                       >
-                        Descripcion Tarea
+                        Description Task
                       </label>
                       <textarea
-                        id="descripcion"
+                        id="description"
                         type="text"
                         className="border w-full mt-2 placeholder-gray-400 rounded-md p-2"
-                        value={descripcion}
-                        onChange={(e) => setDescripcion(e.target.value)}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                       />
                     </div>
 
                     <div className="mb-5">
                       <label
-                        htmlFor="fecha-entrega"
+                        htmlFor="due-date"
                         className="text-gray-700 font-bold text-sm"
                       >
-                        Fecha Entrega
+                        Due Date
                       </label>
                       <input
-                        id="fecha-entrega"
+                        id="due-date"
                         type="date"
                         className="border w-full mt-2 placeholder-gray-400 rounded-md p-2"
-                        value={fechaEntrega}
-                        onChange={(e) => setFechaEntrega(e.target.value)}
+                        value={dueDate}
+                        onChange={(e) => setDueDate(e.target.value)}
                       />
                     </div>
 
                     <div className="mb-5">
                       <label
-                        htmlFor="prioridad"
+                        htmlFor="priority"
                         className="text-gray-700 font-bold text-sm"
                       >
-                        Prioridad
+                        Priority
                       </label>
                       <select
-                        id="prioridad"
+                        id="priority"
                         type="text"
                         className="border w-full mt-2 placeholder-gray-400 rounded-md p-2"
-                        value={prioridad}
-                        onChange={(e) => setPrioridad(e.target.value)}
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value)}
                       >
-                        <option value="">-- Seleccionar --</option>
-                        {PRIORIDAD.map((opcion) => (
-                          <option key={opcion}>{opcion}</option>
+                        <option value="">-- Select --</option>
+                        {PRIORITY.map((option) => (
+                          <option key={option}>{option}</option>
                         ))}
                       </select>
                     </div>
 
                     <input
                       type="submit"
-                      value={id ? "Guardar Cambios" : "Crear Tarea"}
-                      className="bg-sky-500 hover:bg-sky-600 w-full py-2 text-white font-bold text-center hover:cursor-pointer transition-colors rounded"
+                      value={id ? "Save Changes" : "Save Task"}
+                      className="bg-primary border-2 border-primary w-full text-white py-3 font-bold rounded hover:cursor-pointer hover:bg-white hover:text-primary transition-colors"
                     />
                   </form>
                 </div>
@@ -224,4 +218,4 @@ const ModalFormularioTarea = () => {
   );
 };
 
-export default ModalFormularioTarea;
+export default ModalFormTask;

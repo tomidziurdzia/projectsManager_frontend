@@ -3,9 +3,9 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import useAuth from "../hooks/useAuth";
 
-const RutaProtegida = () => {
-  const { auth, cargando } = useAuth();
-  if (cargando) return "Cargando...";
+const ProtectedRoute = () => {
+  const { auth, loading } = useAuth();
+  if (loading) return "Loading...";
 
   return (
     <>
@@ -26,4 +26,4 @@ const RutaProtegida = () => {
   );
 };
 
-export default RutaProtegida;
+export default ProtectedRoute;

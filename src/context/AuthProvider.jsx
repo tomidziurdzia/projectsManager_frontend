@@ -1,20 +1,20 @@
 import { useState, useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
-import clienteAxios from "../config/clienteAxios";
+import clientAxios from "../config/clientAxios";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
-  const [cargando, setCargando] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const autenticarUsuario = async () => {
+    const authenticateUser = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        setCargando(false);
+        setLoading(false);
         return;
       }
 
@@ -26,7 +26,7 @@ const AuthProvider = ({ children }) => {
       };
 
       try {
-        const { data } = await clienteAxios("/usuarios/perfil", config);
+        const { data } = await clientAxios("/users/perfil", config);
         setAuth(data);
         // Opcional que al recargar me rediriga siempre a proyectos
         // navigate("/proyectos");
@@ -34,17 +34,17 @@ const AuthProvider = ({ children }) => {
         setAuth({});
       }
 
-      setCargando(false);
+      setLoading(false);
     };
-    autenticarUsuario();
+    authenticateUser();
   }, []);
 
-  const cerrarSesionAuth = () => {
+  const logoutSesionAuth = () => {
     setAuth({});
   };
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth, cargando, cerrarSesionAuth }}>
+    <AuthContext.Provider value={{ auth, setAuth, loading, logoutSesionAuth }}>
       {children}
     </AuthContext.Provider>
   );

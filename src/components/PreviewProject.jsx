@@ -1,21 +1,21 @@
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-const PreviewProyecto = ({ proyecto }) => {
+const PreviewProject = ({ project }) => {
   const { auth } = useAuth();
-  const { nombre, _id, cliente, creador } = proyecto;
+  const { name, _id, client, creator } = project;
 
   return (
     <div className="border-b p-5 flex justify-between flex-col md:flex-row">
       <div className="flex gap-2">
         <p className="flex-1">
-          {nombre}
-          <span className="text-sm text-gray-500"> {cliente}</span>
+          {name}
+          <span className="text-sm text-gray-500"> {client}</span>
         </p>
 
-        {auth._id !== creador && (
+        {auth._id !== creator && (
           <p className="p-1 text-xs rounded-lg text-white bg-green-500 font-bold">
-            Colaborador
+            Collaborator
           </p>
         )}
       </div>
@@ -23,10 +23,10 @@ const PreviewProyecto = ({ proyecto }) => {
         to={`${_id}`}
         className="text-gray-500 hover:text-gray-600 hover:cursor-pointer text-sm font-bold"
       >
-        Ver Proyecto
+        View Project
       </Link>
     </div>
   );
 };
 
-export default PreviewProyecto;
+export default PreviewProject;

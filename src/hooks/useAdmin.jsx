@@ -1,10 +1,10 @@
 import useAuth from "./useAuth";
-import useProyectos from "./useProyectos";
+import useProjects from "./useProjects";
 
 const useAdmin = () => {
-  const { proyecto } = useProyectos();
+  const { project } = useProjects();
   const { auth } = useAuth();
-  return proyecto.creador === auth._id;
+  return project.creator === auth._id;
 };
 
 export default useAdmin;

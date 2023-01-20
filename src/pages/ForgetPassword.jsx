@@ -1,43 +1,42 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Alerta from "../components/Alerta";
-import clienteAxios from "../config/clienteAxios";
+import Alert from "../components/Alert";
+import clientAxios from "../config/clientAxios";
 
-const OlvidePassword = () => {
+const ForgetPassword = () => {
   const [email, setEmail] = useState("");
-  const [alerta, setAlerta] = useState({});
+  const [alert, setAlert] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (email === "") {
-      setAlerta({ msg: "El email es obligatorio", error: true });
+      setAlert({ msg: "Email is required", error: true });
       return;
     }
 
     try {
-      const { data } = await clienteAxios.post(`/usuarios/olvide-password`, {
+      const { data } = await clientAxios.post(`/users/forget-password`, {
         email,
       });
 
-      setAlerta({ msg: data.msg, error: false });
-      console.log(data.msg);
+      setAlert({ msg: data.msg, error: false });
     } catch (error) {
-      setAlerta({
+      setAlert({
         msg: error.response.data.msg,
         error: true,
       });
     }
   };
 
-  const { msg } = alerta;
+  const { msg } = alert;
 
   return (
     <>
-      <h1 className="text-sky-500 font-black text-3xl text-center">
-        Recuperar acceso y administra tus proyectos
+      <h1 className="text-primary font-black text-3xl text-center">
+        Recover access and manage your projects
       </h1>
-      {msg && <Alerta alerta={alerta} />}
+      {msg && <Alert alert={alert} />}
       <form
         className="my-10 bg-white shadow rounded-lg p-10"
         onSubmit={handleSubmit}
@@ -48,7 +47,7 @@ const OlvidePassword = () => {
           </label>
           <input
             type="email"
-            placeholder="Email de registro"
+            placeholder="Register email"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
             id="email"
             value={email}
@@ -58,24 +57,24 @@ const OlvidePassword = () => {
 
         <input
           type="submit"
-          value="Enviar Instrucciones"
-          className="bg-sky-500 w-full text-white py-3 font-bold rounded hover:cursor-pointer hover:bg-sky-600 transition-colors"
+          value="Send Instructions"
+          className="bg-primary border-2 text-center border-primary w-full text-white py-3 font-bold rounded hover:cursor-pointer hover:bg-white hover:text-primary transition-colors"
         />
       </form>
 
       <nav className="lg:flex lg:justify-between">
         <Link className="block text-center my-5 text-slate-500 text-sm" to="/">
-          Ya tienes una cuenta? Inicia sesion
+          Do you already have an account? Login
         </Link>
         <Link
           className="block text-center my-5 text-slate-500 text-sm"
-          to="/registrar"
+          to="/register"
         >
-          No tienes una cuenta? Registrate
+          You do not have an account? Sign up
         </Link>
       </nav>
     </>
   );
 };
 
-export default OlvidePassword;
+export default ForgetPassword;
