@@ -6,7 +6,7 @@ import ModalFormTask from "../components/ModalFormTask";
 import ModalDeleteTask from "../components/ModalDeleteTask";
 import Task from "../components/Task";
 import Collaborator from "../components/Collaborator";
-import ModalDeleteCollaborator from "../components/modalDeleteCollaborator";
+import ModalDeleteCollaborator from "../components/ModalDeleteCollaborator";
 import { io } from "socket.io-client";
 
 let socket;

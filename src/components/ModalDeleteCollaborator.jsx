@@ -4,7 +4,6 @@ import useProjects from "../hooks/useProjects";
 
 const ModalDeleteCollaborator = () => {
   const {
-    collaborator,
     handleModalDeleteCollaborator,
     modalDeleteCollaborator,
     deleteCollaborator,
